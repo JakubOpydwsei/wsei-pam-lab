@@ -1,5 +1,6 @@
 package pl.wsei.pam.lab01
 
+import pl.wsei.pam.R
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
@@ -9,7 +10,7 @@ import android.widget.Toolbar.LayoutParams
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ProgressBar
 
-class MainActivity : AppCompatActivity() {
+class Lab01Activity : AppCompatActivity() {
     lateinit var mLayout: LinearLayout
     lateinit var mTitle: TextView
     var mBoxes: MutableList<CheckBox> = mutableListOf()
@@ -33,13 +34,15 @@ class MainActivity : AppCompatActivity() {
         mLayout.addView(mTitle)
 
 
-        mProgress = ProgressBar(
-            this,
-            null,
-            androidx.appcompat.R.attr.progressBarStyle,
-            androidx.appcompat.R.style.Widget_AppCompat_ProgressBar_Horizontal
-
-        )
+        mProgress = ProgressBar(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            isIndeterminate = false
+            max = 100
+        }
+        mProgress.progress = (progressValue * 100) / 6
 
 
 
