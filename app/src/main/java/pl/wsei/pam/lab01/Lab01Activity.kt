@@ -215,6 +215,17 @@ fun task15(degree: String): Int {
 // są 2 elementy "B" i jeden "A", a w magazynie mamy 2 "A" i 4 "B",
 // czyli do zbudowania trzeciego egzemplarza zabraknie elementów typu "B"
 fun task16(store: Map<String, UInt>, asset: Map<String, UInt>): UInt {
-    return asset.map { (key, value) -> store.getOrDefault(key, 0u) / value }
-        .minOrNull() ?: 0u
+    var minRatio = UInt.MAX_VALUE
+    for ((key, assetValue) in asset) {
+        val storeValue = store.getOrDefault(key, 0u)
+        if (assetValue > 0u) {
+            val ratio = storeValue / assetValue
+            if (ratio < minRatio) {
+                minRatio = ratio
+            }
+        } else {
+            return 0u
+        }
+    }
+    return if (minRatio == UInt.MAX_VALUE) 0u else minRatio
 }
