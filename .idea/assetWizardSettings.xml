@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/rocket_launch/baseline_rocket_launch_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/360/baseline_360_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,9 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="6d198b" />
-                            <entry key="outputName" value="baseline_rocket_launch_24" />
-                            <entry key="sourceFile" value="C:\Users\KKB\Desktop\Studia\Mobilne\wsei-pam-lab" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="color" value="8b1d19" />
+                            <entry key="outputName" value="s16" />
+                            <entry key="sourceFile" value="C:\Users\KKB\Desktop\thumb_up_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" />
                           </map>
                         </option>
                       </PersistentState>

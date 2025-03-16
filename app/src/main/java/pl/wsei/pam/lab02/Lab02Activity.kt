@@ -1,5 +1,6 @@
 package pl.wsei.pam.lab02
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -7,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 //import pl.wsei.pam.lab02.R
 import pl.wsei.pam.R
+import pl.wsei.pam.lab03.Lab03Activity
 
 
 class Lab02Activity : AppCompatActivity() {
@@ -39,5 +41,12 @@ class Lab02Activity : AppCompatActivity() {
 
         // Wyświetlanie komunikatu z rozmiarem planszy
         Toast.makeText(this, "rows: $rows, columns: $columns", Toast.LENGTH_SHORT).show()
+
+
+        val intent = Intent(this, Lab03Activity::class.java)
+        val size: IntArray = intArrayOf(rows!!, columns!!)
+        intent.putExtra("size", size)
+        startActivity(intent)
+
     }
 }
