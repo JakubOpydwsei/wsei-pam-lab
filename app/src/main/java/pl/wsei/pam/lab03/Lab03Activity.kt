@@ -1,5 +1,7 @@
 package pl.wsei.pam.lab03
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -42,6 +44,9 @@ class Lab03Activity : AppCompatActivity() {
     private lateinit var logic: MemoryGameLogic
     private var isProcessing = false
 
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -64,9 +69,9 @@ class Lab03Activity : AppCompatActivity() {
             columns == 3 && rows == 4 -> numPairs = 6
             columns == 4 && rows == 4 -> numPairs = 8
             columns == 6 && rows == 6 -> numPairs = 18
-            else -> throw IllegalArgumentException("Unsupported board size")
+            else -> throw IllegalArgumentException("Otrzymano błędne wymiary!: -> Columns: $columns, Rows: $rows ?")
         }
-        Log.d("MemoryGame", "Pairs: $numPairs")
+//        Log.d("MemoryGame", "Pairs: $numPairs")
         val iconsToUse = allIcons.take(numPairs) + allIcons.take(numPairs)
         val shuffledIcons = iconsToUse.shuffled().toMutableList()
 
@@ -81,18 +86,18 @@ class Lab03Activity : AppCompatActivity() {
             for (j in 0 until columns) {
                 val button = ImageButton(gridLayout.context).apply {
                     layoutParams = GridLayout.LayoutParams().apply {
-                        // Ustawiamy na 0, aby pozwolić GridLayout rozciągać przyciski
+                        // Ustawiamy na 0, inaczej się nie rozciągnie
                         width = 0
                         height = 0
-                        // Określamy wagę, by przyciski rozciągały się proporcjonalnie do dostępnej przestrzeni
-                        rowSpec = GridLayout.spec(i, 1f) // Waga w wierszu
-                        columnSpec = GridLayout.spec(j, 1f) // Waga w kolumnie
-                        setMargins(10, 10, 10, 10) // Marginesy dla przycisków
+                        // waga aby zajmowały max przestrzeń
+                        rowSpec = GridLayout.spec(i, 1f)
+                        columnSpec = GridLayout.spec(j, 1f)
+                        setMargins(10, 10, 10, 10)
                     }
-                    tag = "$i,$j" // Przypisanie tagu dla identyfikacji
+                    tag = "$i,$j"
                 }
 
-                gridLayout.addView(button)  // Dodanie przycisku do gridLayout
+                gridLayout.addView(button)
 
 
                 val tile = Tile(button, shuffledIcons.removeAt(0), R.drawable.deck)
@@ -111,16 +116,56 @@ class Lab03Activity : AppCompatActivity() {
         tile.revealed = true
         flippedTiles.add(tile)
 
+
+
+
         if (flippedTiles.size == 2) {
             isProcessing = true
 
             val isMatch = flippedTiles[0].tileResource == flippedTiles[1].tileResource
+
+            val scaleUpX = ObjectAnimator.ofFloat(flippedTiles[0].button, "scaleX", 1f, 1.2f)
+            val scaleUpY = ObjectAnimator.ofFloat(flippedTiles[0].button, "scaleY", 1f, 1.2f)
+            val rotation = ObjectAnimator.ofFloat(flippedTiles[0].button, "rotation", 0f, 360f)
+            val scaleDownX = ObjectAnimator.ofFloat(flippedTiles[0].button, "scaleX", 1.2f, 1f)
+            val scaleDownY = ObjectAnimator.ofFloat(flippedTiles[0].button, "scaleY", 1.2f, 1f)
+            val shakeX = ObjectAnimator.ofFloat(flippedTiles[0].button, "translationX", 0f, 10f, 0f)
+            val shakeY = ObjectAnimator.ofFloat(flippedTiles[0].button, "translationY", 0f, 10f, 0f)
+            val alpha = ObjectAnimator.ofFloat(flippedTiles[0].button, "alpha", 1f, 0.3f)
+
+            val scaleUpX2 = ObjectAnimator.ofFloat(flippedTiles[1].button, "scaleX", 1f, 1.2f)
+            val scaleUpY2 = ObjectAnimator.ofFloat(flippedTiles[1].button, "scaleY", 1f, 1.2f)
+            val rotation2 = ObjectAnimator.ofFloat(flippedTiles[1].button, "rotation", 0f, 360f)
+            val scaleDownX2 = ObjectAnimator.ofFloat(flippedTiles[1].button, "scaleX", 1.2f, 1f)
+            val scaleDownY2 = ObjectAnimator.ofFloat(flippedTiles[1].button, "scaleY", 1.2f, 1f)
+            val shakeX2 = ObjectAnimator.ofFloat(flippedTiles[1].button, "translationX", 0f, 10f, 0f)
+            val shakeY2 = ObjectAnimator.ofFloat(flippedTiles[1].button, "translationY", 0f, 10f, 0f)
+            val alpha2 = ObjectAnimator.ofFloat(flippedTiles[1].button, "alpha", 1f, 0.3f)
+
+            val animatorMatch = AnimatorSet()
+            animatorMatch.playSequentially(
+                AnimatorSet().apply { playTogether(scaleUpX, scaleUpY,scaleUpX2, scaleUpY2) },
+                AnimatorSet().apply { playTogether(rotation,rotation2) },
+
+                AnimatorSet().apply { playTogether(scaleDownX, scaleDownY,scaleDownX2, scaleDownY2) },
+                AnimatorSet().apply { playTogether(alpha,alpha2) },
+
+            )
+            animatorMatch.duration = 500L
+
+            val animatorFalse = AnimatorSet()
+            animatorFalse.playSequentially(
+                AnimatorSet().apply { playTogether(shakeX, shakeY,shakeX2, shakeY2) },
+            )
+            animatorFalse.duration = 300L
+
 
             if (isMatch) {
                 matchedPairs++
                 flippedTiles.clear()
                 isProcessing = false
                 checkGameFinished()
+                animatorMatch.start()
             } else {
                 Handler(Looper.getMainLooper()).postDelayed({
                     runOnUiThread {
@@ -129,6 +174,7 @@ class Lab03Activity : AppCompatActivity() {
                         isProcessing = false
                     }
                 }, 1000)
+                animatorFalse.start()
             }
         }
     }
