@@ -2,11 +2,14 @@ package pl.wsei.pam.lab03
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.Toast
@@ -18,6 +21,7 @@ import java.util.*
 class Lab03Activity : AppCompatActivity() {
 
     private lateinit var gridLayout: GridLayout
+    private lateinit var audioManager: AudioManager
     private val tiles: MutableMap<String, Tile> = mutableMapOf()
     private var iconsToUse: MutableList<Int> = mutableListOf()
     private var matchedPairs = 0
@@ -28,19 +32,21 @@ class Lab03Activity : AppCompatActivity() {
     lateinit var completionPlayer: MediaPlayer
     lateinit var negativePlayer: MediaPlayer
     private var savedRevealedStates: ArrayList<Boolean>? = null
+    private var isSound: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_lab03)
 
         gridLayout = findViewById(R.id.gridLayout)
+        audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
 
         if (savedInstanceState != null) {
             iconsToUse = savedInstanceState.getIntegerArrayList("iconsToUse")!!.toMutableList()
             matchedPairs = savedInstanceState.getInt("matchedPairs", 0)
             savedRevealedStates = savedInstanceState.getSerializable("revealedStates") as ArrayList<Boolean>
         }
-
 
         val size = intent.getIntArrayExtra("size") ?: intArrayOf(4, 4)
         val rows = size[0]
@@ -63,6 +69,30 @@ class Lab03Activity : AppCompatActivity() {
         }
 
         setupBoard(columns, rows)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.board_activity_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.board_activity_sound_up, R.id.board_activity_sound_down -> {
+                if (isSound) {
+                    Toast.makeText(this, "Sound off", Toast.LENGTH_SHORT).show()
+                    item.setIcon(R.drawable.baseline_volume_down_40)
+                    isSound = false
+                } else {
+                    Toast.makeText(this, "Sound on", Toast.LENGTH_SHORT).show()
+                    item.setIcon(R.drawable.baseline_volume_up_40)
+                    isSound = true
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun getPairsCount(rows: Int, columns: Int): Int {
@@ -99,7 +129,6 @@ class Lab03Activity : AppCompatActivity() {
                 val tile = Tile(button, icon, R.drawable.deck)
                 tiles[button.tag.toString()] = tile
 
-                // Przywrócenie stanu
                 savedRevealedStates?.let { states ->
                     tile.revealed = states[index]
                 }
@@ -110,7 +139,6 @@ class Lab03Activity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun onTileClicked(tile: Tile) {
         if (tile.revealed || flippedTiles.size == 2 || isProcessing) return
@@ -124,13 +152,13 @@ class Lab03Activity : AppCompatActivity() {
             if (isMatch) {
                 matchedPairs++
                 playMatchAnimation(flippedTiles[0], flippedTiles[1])
-                completionPlayer.start()
+                if (isSound) completionPlayer.start()
                 flippedTiles.clear()
                 isProcessing = false
                 checkGameFinished()
             } else {
                 playNoMatchAnimation(flippedTiles[0], flippedTiles[1])
-                negativePlayer.start()
+                if (isSound) negativePlayer.start()
                 Handler(Looper.getMainLooper()).postDelayed({
                     runOnUiThread {
                         flippedTiles.forEach { it.revealed = false }
@@ -199,7 +227,6 @@ class Lab03Activity : AppCompatActivity() {
         tiles.entries.sortedBy { it.key }.forEach { revealedStates.add(it.value.revealed) }
         outState.putSerializable("revealedStates", revealedStates)
     }
-
 
     private data class Tile(val button: ImageButton, val tileResource: Int, val deckResource: Int) {
         init {
