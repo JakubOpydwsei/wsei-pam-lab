@@ -5,12 +5,10 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -46,7 +44,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
@@ -55,7 +52,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import pl.wsei.pam.lab06.ui.theme.Lab01Theme
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -74,10 +70,10 @@ class Lab06 : ComponentActivity() {
 
 class TaskViewModel : ViewModel() {
     private val _tasks = mutableStateListOf<TodoTask>(
-        TodoTask("Programming", LocalDate.of(2024, 4, 18), false, Priority.Low),
-        TodoTask("Teaching", LocalDate.of(2024, 5, 12), false, Priority.High),
-        TodoTask("Learning", LocalDate.of(2024, 6, 28), true, Priority.Low),
-        TodoTask("Cooking", LocalDate.of(2024, 8, 18), false, Priority.Medium)
+        TodoTask("Programming", LocalDate.of(2024, 4, 18), false, Priority.Low, 1),
+        TodoTask("Teaching", LocalDate.of(2024, 5, 12), false, Priority.High, 2),
+        TodoTask("Learning", LocalDate.of(2024, 6, 28), true, Priority.Low, 3),
+        TodoTask("Cooking", LocalDate.of(2024, 8, 18), false, Priority.Medium, 4)
     )
 
     val tasks: List<TodoTask> get() = _tasks
@@ -141,7 +137,8 @@ data class TodoTask(
     val title: String,
     val deadline: LocalDate,
     val isDone: Boolean,
-    val priority: Priority
+    val priority: Priority,
+    val id: Int
 )
 
 enum class Priority {
@@ -150,10 +147,10 @@ enum class Priority {
 
 fun todoTasks(): MutableList<TodoTask> {
     return mutableListOf(
-        TodoTask("Programming", LocalDate.of(2024, 4, 18), false, Priority.Low),
-        TodoTask("Teaching", LocalDate.of(2024, 5, 12), false, Priority.High),
-        TodoTask("Learning", LocalDate.of(2024, 6, 28), true, Priority.Low),
-        TodoTask("Cooking", LocalDate.of(2024, 8, 18), false, Priority.Medium),
+        TodoTask("Programming", LocalDate.of(2024, 4, 18), false, Priority.Low, 1),
+        TodoTask("Teaching", LocalDate.of(2024, 5, 12), false, Priority.High, 2),
+        TodoTask("Learning", LocalDate.of(2024, 6, 28), true, Priority.Low, 3),
+        TodoTask("Cooking", LocalDate.of(2024, 8, 18), false, Priority.Medium, 4),
     )
 }
 
@@ -227,6 +224,7 @@ fun FormScreen(navController: NavController, taskViewModel: TaskViewModel) {
     var showDatePicker by remember { mutableStateOf(false) }
     var priority by remember { mutableStateOf(Priority.Low) }
     var isDone by remember { mutableStateOf(false) }
+    var id by remember { mutableStateOf(0) }
 
     Scaffold(
         topBar = {
@@ -245,8 +243,9 @@ fun FormScreen(navController: NavController, taskViewModel: TaskViewModel) {
                         TodoTask(
                             title = title,
                             deadline = LocalDate.parse(dateFormatter.format(dueDate)),
+                            isDone = isDone,
                             priority = priority,
-                            isDone = isDone
+                            id = id
                         )
                     )
                     // Navigate back to the list screen

@@ -39,6 +39,8 @@ android {
     }
 }
 
+val room_version = "2.6.1" // Wersja Room, może być 2.7.0, w zależności od wyboru
+
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -54,6 +56,11 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation("androidx.compose.material3:material3:1.1.2")
 
+    // ROOM
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
+    // Testowanie
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
