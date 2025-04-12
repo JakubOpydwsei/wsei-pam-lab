@@ -30,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -222,7 +223,7 @@ fun FormScreen(navController: NavController, taskViewModel: TaskViewModel) {
     var dueDate by remember { mutableStateOf(Date()) }
     var showDatePicker by remember { mutableStateOf(false) }
     var priority by remember { mutableStateOf(Priority.Low) }
-    var isDone by remember { mutableStateOf(false) }
+    var isInProgress by remember { mutableStateOf(true) }
     var id by remember { mutableStateOf(0) }
 
     Scaffold(
@@ -242,7 +243,7 @@ fun FormScreen(navController: NavController, taskViewModel: TaskViewModel) {
                         TodoTask(
                             title = title,
                             deadline = LocalDate.parse(dateFormatter.format(dueDate)),
-                            isDone = isDone,
+                            isDone = !isInProgress,
                             priority = priority,
                             id = id
                         )
@@ -269,6 +270,23 @@ fun FormScreen(navController: NavController, taskViewModel: TaskViewModel) {
                 label = { Text("Tytuł zadania") },
                 modifier = Modifier.fillMaxWidth()
             )
+
+            // Status radio buttons
+            Text("Status:")
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = isInProgress,
+                    onClick = { isInProgress = true }
+                )
+                Text("W trakcie", modifier = Modifier.padding(end = 16.dp))
+
+                RadioButton(
+                    selected = !isInProgress,
+                    onClick = { isInProgress = false }
+                )
+                Text("Zakończone")
+            }
+
 
             // Date picker and selected date
             Row(

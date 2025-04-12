@@ -5,7 +5,7 @@ import pl.wsei.pam.lab06.TodoTask
 class DatabaseTodoTaskRepository(val dao: TodoTaskDao) : TodoTaskRepository {
 
     override fun getAllAsStream(): Flow<List<TodoTask>> {
-        return dao.findAll().map { it -> it.map { it.toModel() } }
+        return dao.findAll().map { it.map { it.toModel() } }
     }
 
     override fun getItemAsStream(id: Int): Flow<TodoTask?> {
@@ -24,3 +24,4 @@ class DatabaseTodoTaskRepository(val dao: TodoTaskDao) : TodoTaskRepository {
         dao.update(TodoTaskEntity.fromModel(item))
     }
 }
+

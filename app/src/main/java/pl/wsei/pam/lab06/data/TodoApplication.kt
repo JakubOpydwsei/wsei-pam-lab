@@ -5,7 +5,6 @@ import AppDataContainer
 import android.app.Application
 
 class TodoApplication : Application() {
-
     lateinit var container: AppContainer
 
     override fun onCreate() {
@@ -13,3 +12,4 @@ class TodoApplication : Application() {
         container = AppDataContainer(this.applicationContext)
     }
 }
+
