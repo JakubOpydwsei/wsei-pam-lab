@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import pl.wsei.pam.lab01.Lab01Activity
 import pl.wsei.pam.R
 import pl.wsei.pam.lab02.Lab02Activity
+import pl.wsei.pam.lab06.Lab06
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,4 +25,10 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, Lab02Activity::class.java)
         startActivity(intent)
     }
+    fun onClickMainBtnRunLab06(v: View) {
+        Toast.makeText(this, "Opening Lab 6", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, Lab06::class.java)
+        startActivity(intent)
+    }
+
 }
