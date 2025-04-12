@@ -117,7 +117,7 @@ fun AppTopBar(navController: NavController, title: String, showBackIcon: Boolean
             }
         },
         actions = {
-            if (route !== "form") { // !@!@!@!!@!@!@!!@!@!@!@!@!@!!@!@!@!!@
+            if (route !== "form") {
                 OutlinedButton(onClick = { navController.navigate("list") }) {
                     Text(text = "Zapisz", fontSize = 18.sp)
                 }
@@ -219,7 +219,6 @@ fun FormScreen(navController: NavController, taskViewModel: TaskViewModel) {
 
     // Manage the state for the form
     var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf(Date()) }
     var showDatePicker by remember { mutableStateOf(false) }
     var priority by remember { mutableStateOf(Priority.Low) }
@@ -268,14 +267,6 @@ fun FormScreen(navController: NavController, taskViewModel: TaskViewModel) {
                 value = title,
                 onValueChange = { title = it },
                 label = { Text("Tytuł zadania") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            // Description field
-            OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Opis zadania") },
                 modifier = Modifier.fillMaxWidth()
             )
 
