@@ -21,5 +21,6 @@ interface TodoTaskDao {
 
     @Update
     suspend fun update(item: TodoTaskEntity)
+
 }
 
