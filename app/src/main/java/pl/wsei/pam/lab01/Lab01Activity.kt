@@ -1,6 +1,5 @@
 package pl.wsei.pam.lab01
 
-import pl.wsei.pam.R
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox

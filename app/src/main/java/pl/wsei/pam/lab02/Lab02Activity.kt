@@ -6,8 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-//import pl.wsei.pam.lab02.R
-import pl.wsei.pam.R
+import pl.wsei.pam.lab01.R
 import pl.wsei.pam.lab03.Lab03Activity
 
 

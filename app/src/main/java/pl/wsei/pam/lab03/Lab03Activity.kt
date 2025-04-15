@@ -15,7 +15,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import pl.wsei.pam.R
+import pl.wsei.pam.lab01.R
 import java.util.*
 
 class Lab03Activity : AppCompatActivity() {

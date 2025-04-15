@@ -2,8 +2,7 @@
     <string name="app_name">Lab01</string>
     <string name="lab01">Lab01</string>
     <string name="lab02">Lab02</string>
-    <string name="title_activity_lab06">Lab06Activity</string>
-    <string name="lab69">Lab06_9</string>
-    <string name="lab68">Lab6_8</string>
-    <string name="title_activity_test2">test2</string>
+    <string name="board_activity_menu_sound">board_activity_menu_sound</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="lab6_8">Lab6_8</string>
 </resources>
