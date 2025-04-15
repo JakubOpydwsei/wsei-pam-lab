@@ -1,40 +1,26 @@
+package pl.wsei.pam.lab06.data
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import pl.wsei.pam.lab06.Priority
 import pl.wsei.pam.lab06.TodoTask
-import java.time.LocalDate
 
-@Entity(tableName = "tasks")
+@Entity(tableName = "todo_tasks")
 data class TodoTaskEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
-    val deadline: LocalDate,
-    var isDone: Boolean,
-    val priority: Priority
-)
-{
-    fun toModel(): TodoTask {
-        return TodoTask(
-            id = id,
-            deadline = deadline,
-            isDone = isDone,
-            priority = priority,
-            title = title
+    val deadline: String,
+    val isDone: Boolean,
+    val priority: String
+) {
+    fun toModel() = TodoTask(id, title, deadline, isDone, priority)
+
+    companion object {
+        fun fromModel(task: TodoTask) = TodoTaskEntity(
+            id = task.id,
+            title = task.title,
+            deadline = task.deadline,
+            isDone = task.isDone,
+            priority = task.priority
         )
     }
-
-    companion object{
-        fun fromModel(model: TodoTask): TodoTaskEntity {
-            return TodoTaskEntity(
-                id = model.id,
-                title = model.title,
-                priority = model.priority,
-                isDone = model.isDone,
-                deadline = model.deadline
-            )
-        }
-    }
 }
-
-
